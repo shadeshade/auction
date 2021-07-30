@@ -1,0 +1,17 @@
+{% extends 'wrapper.html' %}
+
+{% block title %}
+Registration
+{% endblock %}
+
+
+{% block content %}
+    <h1 class="content-title">Registration Page</h1>
+    <form method=post>
+        {% csrf_token %}
+      <dl>
+        {{ form.as_p }}
+      </dl>
+      <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+{% endblock %}
