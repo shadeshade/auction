@@ -1,0 +1,16 @@
+{% extends 'wrapper.html' %}
+
+{% block title %}
+Add Book
+{% endblock %}
+
+{% block content %}
+    <h1 class="content-title">Add Item</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <dl>
+        {{ form.as_p }}
+      </dl>
+      <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+Main page
+{% endblock %}
+
+{% block content %}
+
+<h1 class="content-title">Bidding Item Page</h1>
+
+<div class="row">
+{% for object in object_list %}
+<div class="item-card">
+<a href="{% url 'biddings:bidding_item' object.id %}">
+
+    <p class="card-text"><i class="fas fa-user-md"></i> &nbsp; {{ object.item_name }}</p>
+    <img src="{{ object.image }}" class="item-image" alt="item-image">
+    <p class="card-text"><i class="fas fa-user-md"></i> &nbsp; {{ object.starting_bid }}</p>
+    <p class="card-text"><i class="fas fa-user-md"></i> &nbsp; {{ object.auction_starts_at }}</p>
+    <p class="card-text"><i class="fas fa-user-md"></i> &nbsp; {{ object.auction_ends_at }}</p>
+</a>
+
+</div>
+{% endfor %}
+</div>
+{% endblock %}

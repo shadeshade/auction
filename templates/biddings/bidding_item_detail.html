@@ -1,0 +1,35 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+{{ object.name }}
+{% endblock %}
+
+{% block content %}
+<h1 class="content-title">Bidding Item Page</h1>
+    <img class="bid-image" src="{{ object.image.url }}">
+
+    {% if object.seller == user %}
+    <p><a href="{% url 'biddings:bidding_item_update' object.id %}">Update</a></p>
+    <p><a href="{% url 'biddings:bidding_item_delete' object.id %}">Delete</a></p>
+    {% endif %}
+<section class="bid-section">
+    <div class="container">
+        <p>Item: {{ object.item_name }}</p>
+        <p>Description: {{ object.description }}</p>
+        <p>Current price: {{ object.price }}</p>
+        <p>auction_starts_at {{ object.auction_starts_at }}</p>
+        <p>auction_ends_at {{ object.auction_ends_at }}</p>
+        <p>seller {{ object.seller.username }}</p>
+        <div class="contact-left">
+                <form method=post>
+                    {% csrf_token %}
+                  <dl>
+                    {{ form.as_p }}
+                  </dl>
+                  <button class="btn btn-primary" type="submit">Place Bid</button>
+                </form>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

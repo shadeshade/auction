@@ -1,0 +1,18 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+{{object.name}}
+{% endblock %}
+
+{% block content %}
+
+<h1 class="content-title">Bidding Item Update Page</h1>
+
+<form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-danger" type="submit">Confirm</button>
+        <a class="btn btn-primary" href="{% url 'biddings:bidding_item' object.id %}">Cancel</a>
+</form>
+
+{% endblock %}

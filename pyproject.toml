@@ -8,6 +8,8 @@ authors = ["Abdul Magomedov <privetabdul@gmail.com>"]
 python = "^3.8"
 Django = "^3.2.5"
 python-dotenv = "^0.19.0"
+Pillow = "^8.3.1"
+factory-boy = "3.2.0"
 
 [tool.poetry.dev-dependencies]
 
