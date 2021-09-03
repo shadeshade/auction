@@ -7,8 +7,9 @@ from django.core.files.base import ContentFile
 from django.db import models
 
 
-def place_bit(obj: 'biddings.BiddingItem', bid: int):
+def place_bit(obj: 'biddings.BiddingItem', bid: int, purchaser: 'users.MyUser'):
     obj.price += int(bid)
+    obj.purchaser = purchaser
     obj.save()
 
 

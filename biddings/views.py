@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
+from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import (
@@ -16,6 +17,11 @@ from .forms import BiddingItemCreateViewForm, BiddingItemForm
 from .models import BiddingItem
 from .tools import place_bit
 
+
+def room(request, room_name):
+    return render(request, 'room.html', {
+        'room_name': room_name
+    })
 
 class BiddingItemListView(ListView):
     model = BiddingItem
@@ -54,9 +60,7 @@ class BiddingItemFormView(SingleObjectMixin, FormView):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
         self.object = self.get_object()
-        new_bid = request.POST['bid']
-        place_bit(self.object, new_bid)
-
+        place_bit(obj=self.object, bid=request.POST['bid'], purchaser=request.user)
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -72,7 +76,6 @@ class BiddingItemView(View):
     def post(self, request, *args, **kwargs):
         view = BiddingItemFormView.as_view()
         return view(request, *args, **kwargs)
-
 
 
 # class BiddingItemUpdateView(UserPassesTestMixin, UpdateView):

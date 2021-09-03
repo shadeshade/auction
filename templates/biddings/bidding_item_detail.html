@@ -9,27 +9,60 @@
     <img class="bid-image" src="{{ object.image.url }}">
 
     {% if object.seller == user %}
-    <p><a href="{% url 'biddings:bidding_item_update' object.id %}">Update</a></p>
+<!--    <p><a href="{% url 'biddings:bidding_item_update' object.id %}">Update</a></p>-->
     <p><a href="{% url 'biddings:bidding_item_delete' object.id %}">Delete</a></p>
     {% endif %}
 <section class="bid-section">
     <div class="container">
-        <p>Item: {{ object.item_name }}</p>
+        Item: <p id="name">{{ object.item_name }}</p>
         <p>Description: {{ object.description }}</p>
-        <p>Current price: {{ object.price }}</p>
+        Current price: <p id="chat-log"></p>
         <p>auction_starts_at {{ object.auction_starts_at }}</p>
         <p>auction_ends_at {{ object.auction_ends_at }}</p>
         <p>seller {{ object.seller.username }}</p>
         <div class="contact-left">
                 <form method=post>
                     {% csrf_token %}
-                  <dl>
-                    {{ form.as_p }}
-                  </dl>
-                  <button class="btn btn-primary" type="submit">Place Bid</button>
+                        {{ form.as_p }}
+                  <button class="btn btn-primary" id="chat-message-submit" type="submit">Place Bid</button>
                 </form>
         </div>
 
     </div>
+
+
+<!--    <input id="id_bid" type="text" size="100"><br>-->
+<!--    <input id="chat-message-submit" type="button" value="Send">-->
+    {{ object.pk|json_script:"room-name" }}
 </section>
+
+
+<script>
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').innerHTML = data.message;
+        };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#id_bid');
+        const message = messageInputDom.value;
+
+        const current_price = document.querySelector('#chat-log').value
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'current_price': current_price
+        }));
+        messageInputDom.value = '';
+    };
+</script>
+
 {% endblock %}
