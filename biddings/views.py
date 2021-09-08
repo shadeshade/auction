@@ -8,7 +8,6 @@ from django.views.generic import (
     DetailView,
     CreateView,
     DeleteView,
-    UpdateView,
     FormView
 )
 from django.views.generic.detail import SingleObjectMixin
@@ -22,6 +21,7 @@ def room(request, room_name):
     return render(request, 'room.html', {
         'room_name': room_name
     })
+
 
 class BiddingItemListView(ListView):
     model = BiddingItem

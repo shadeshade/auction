@@ -1,8 +1,5 @@
 import json
-from random import randint
-from time import sleep
 
-from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 
