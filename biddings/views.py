@@ -14,7 +14,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from .forms import BiddingItemCreateViewForm, BiddingItemForm
 from .models import BiddingItem
-from .tools import place_bit
+from .tools import place_bid
 
 
 def room(request, room_name):
@@ -60,7 +60,7 @@ class BiddingItemFormView(SingleObjectMixin, FormView):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
         self.object = self.get_object()
-        place_bit(obj=self.object, bid=request.POST['bid'], purchaser=request.user)
+        place_bid(obj=self.object, bid=request.POST['bid'], purchaser=request.user)
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):

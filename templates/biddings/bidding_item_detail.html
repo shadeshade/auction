@@ -9,14 +9,13 @@
     <img class="bid-image" src="{{ object.image.url }}">
 
     {% if object.seller == user %}
-<!--    <p><a href="{% url 'biddings:bidding_item_update' object.id %}">Update</a></p>-->
     <p><a href="{% url 'biddings:bidding_item_delete' object.id %}">Delete</a></p>
     {% endif %}
 <section class="bid-section">
     <div class="container">
         Item: <p id="name">{{ object.item_name }}</p>
         <p>Description: {{ object.description }}</p>
-        Current price: <p id="chat-log"></p>
+        Current price: <p id="chat-log">{{ object.price }}</p>
         <p>auction_starts_at {{ object.auction_starts_at }}</p>
         <p>auction_ends_at {{ object.auction_ends_at }}</p>
         <p>seller {{ object.seller.username }}</p>
@@ -30,9 +29,6 @@
 
     </div>
 
-
-<!--    <input id="id_bid" type="text" size="100"><br>-->
-<!--    <input id="chat-message-submit" type="button" value="Send">-->
     {{ object.pk|json_script:"room-name" }}
 </section>
 
@@ -45,7 +41,7 @@
 
     chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').innerHTML = data.message;
+            document.querySelector('#chat-log').innerHTML = data.bid_message;
         };
 
     chatSocket.onclose = function(e) {
@@ -54,11 +50,11 @@
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#id_bid');
-        const message = messageInputDom.value;
+        const bid_message = messageInputDom.value;
 
-        const current_price = document.querySelector('#chat-log').value
+        const current_price = document.querySelector('#chat-log').innerHTML
         chatSocket.send(JSON.stringify({
-            'message': message,
+            'bid_message': bid_message,
             'current_price': current_price
         }));
         messageInputDom.value = '';
