@@ -22,7 +22,7 @@ class BiddingItemFactory(factory.django.DjangoModelFactory):
 
     item_name = factory.Faker('name')
     description = factory.Faker('name')
-    starting_bid = factory.fuzzy.FuzzyInteger(0, 999999)
+    price = factory.fuzzy.FuzzyInteger(0, 999999)
     auction_starts_at = fuzzy.FuzzyDateTime(
         datetime.datetime(2009, 1, 1, tzinfo=UTC), datetime.datetime(2019, 1, 1, tzinfo=UTC))
     auction_ends_at = fuzzy.FuzzyDateTime(

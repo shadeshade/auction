@@ -13,9 +13,8 @@ class BiddingItem(models.Model, ResizeImageMixin):
         null=False
     )
     image = models.ImageField(
-        null=False,
-        blank=False,
-        upload_to='item_images'
+        upload_to='item_images',
+        default='item_images/default.jpg'
     )
     description = models.TextField()
     price = models.DecimalField(

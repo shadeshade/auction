@@ -5,18 +5,16 @@ from django.urls import path
 from .views import (
     BiddingItemListView,
     BiddingItemCreateView,
-    # BiddingItemUpdateView,
+    BiddingItemDetailView,
     BiddingItemDeleteView,
-    BiddingItemView,
 )
 
 app_name = 'biddings'
 
 urlpatterns = [
     path('', BiddingItemListView.as_view(), name='bidding_item_list'),
-    path('<int:pk>/', BiddingItemView.as_view(), name='bidding_item'),
+    path('<int:pk>/', BiddingItemDetailView.as_view(), name='bidding_item'),
     path('create/', BiddingItemCreateView.as_view(), name='bidding_item_create'),
-    # path('update/<int:pk>/', BiddingItemUpdateView.as_view(), name='bidding_item_update'),
     path('delete/<int:pk>/', BiddingItemDeleteView.as_view(), name='bidding_item_delete'),
 ]
 

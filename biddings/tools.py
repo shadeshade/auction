@@ -7,12 +7,6 @@ from django.core.files.base import ContentFile
 from django.db import models
 
 
-def place_bid(obj: 'biddings.BiddingItem', bid: int, purchaser: 'users.MyUser'):
-    obj.price += int(bid)
-    obj.purchaser = purchaser
-    obj.save()
-
-
 class ResizeImageMixin:
     def resize(self, imageField: models.ImageField, size: tuple):
         im = Image.open(imageField)  # Catch original

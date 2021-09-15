@@ -1,20 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseForbidden
 from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
-from django.views import View
+from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
     CreateView,
-    DeleteView,
-    FormView
+    DeleteView
 )
-from django.views.generic.detail import SingleObjectMixin
 
 from .forms import BiddingItemCreateViewForm, BiddingItemForm
 from .models import BiddingItem
-from .tools import place_bid
 
 
 def room(request, room_name):
@@ -51,51 +46,24 @@ class BiddingItemDetailView(DetailView):
         return context
 
 
-class BiddingItemFormView(SingleObjectMixin, FormView):
-    template_name = 'bidding_item_detail.html'
-    form_class = BiddingItemForm
-    model = BiddingItem
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
-        self.object = self.get_object()
-        place_bid(obj=self.object, bid=request.POST['bid'], purchaser=request.user)
-        return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse('biddings:bidding_item', kwargs={'pk': self.object.pk})
-
-
-class BiddingItemView(View):
-
-    def get(self, request, *args, **kwargs):
-        view = BiddingItemDetailView.as_view()
-        return view(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        view = BiddingItemFormView.as_view()
-        return view(request, *args, **kwargs)
-
-
-# class BiddingItemUpdateView(UserPassesTestMixin, UpdateView):
+# class BiddingItemFormView(SingleObjectMixin, FormView):
+#     template_name = 'bidding_item_detail.html'
+#     form_class = BiddingItemForm
 #     model = BiddingItem
-#     template_name = 'bidding_item_update.html'
-#     fields = ['item_name',
-#               'image',
-#               'description',
-#               'starting_bid',
-#               'auction_starts_at',
-#               'auction_ends_at', ]
-#
-#     def test_func(self):
-#         item = self.get_object()
-#         user = self.request.user
-#         return item.created_by == user or user.is_staff
 #
 #     def get_success_url(self):
-#         """Return the URL to redirect to after processing a valid form."""
 #         return reverse('biddings:bidding_item', kwargs={'pk': self.object.pk})
+#
+#
+# class BiddingItemView(View):
+#
+#     def get(self, request, *args, **kwargs):
+#         view = BiddingItemDetailView.as_view()
+#         return view(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         view = BiddingItemFormView.as_view()
+#         return view(request, *args, **kwargs)
 
 
 class BiddingItemDeleteView(UserPassesTestMixin, DeleteView):
